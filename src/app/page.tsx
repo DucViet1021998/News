@@ -59,7 +59,7 @@ export default function Home() {
 
     return (
         <main>
-            <section className="h-4/5 w-full flex gap-2 justify-center ">
+            <section style={{ height: '70vh' }} className=" w-full flex gap-2 justify-center ">
                 {breakingNews.map((news) => (
                     <div
                         key={news.id}
@@ -68,8 +68,8 @@ export default function Home() {
                     >
                         <img
                             style={{
-                                height: '100%',
                                 width: '100%',
+                                height: '100%',
                             }}
                             src={news.anhDaiDien}
                             alt={news.tomTat}

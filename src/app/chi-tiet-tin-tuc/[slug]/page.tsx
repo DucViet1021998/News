@@ -14,15 +14,14 @@ function DetailNews() {
     );
 
     const news = data?.data.data;
-    console.log(news);
 
-    if (error) return <div>Đã xảy ra lỗi</div>;
     if (!data)
         return (
             <div className="w-full h-screen flex items-center justify-center">
                 <CircularProgress />
             </div>
         );
+    if (error) return <div>Đã xảy ra lỗi</div>;
 
     return (
         <Container className=" flex flex-col">
