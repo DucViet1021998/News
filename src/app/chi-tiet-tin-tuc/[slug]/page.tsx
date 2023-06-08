@@ -10,7 +10,7 @@ function DetailNews() {
     const params = useParams();
 
     const { data, error } = useSWR(
-        `http://api-tintuc-dev.enetviet.com/TinTucHeThong/GetChiTietTinTuc?id=${params.slug}`
+        `https://api-tintuc-dev.enetviet.com/TinTucHeThong/GetChiTietTinTuc?id=${params.slug}`
     );
 
     const news = data?.data.data;
