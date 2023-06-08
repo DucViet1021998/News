@@ -7,8 +7,6 @@ const axiosClient = axios.create({
     },
 });
 
-// axiosClient.defaults.headers.common['Authorization'] = process.env.NEXT_PUBLIC_TOKEN;
-
 axiosClient.interceptors.request.use(function (config) {
     config.headers.Authorization = process.env.NEXT_PUBLIC_TOKEN;
     return config;

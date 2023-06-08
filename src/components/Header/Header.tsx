@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import { AppBar, Box, Toolbar, IconButton, Menu, Container, Button, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-
-import axiosClient from '~/api-client/axios-client';
+import useSWR from 'swr';
 import { LogoIcon } from '../../../public/icons/Icons';
 import Link from 'next/link';
 
@@ -19,29 +18,16 @@ interface Pages {
 
 function Header() {
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-    const [pages, setPages] = useState<Array<Pages>>([]);
-
-    useEffect(() => {
-        async function getDanhSachDanhMucTinTuc() {
-            const res = await axiosClient.get(
-                'DanhMucTinTuc/GetDanhSachDanhMucTinTuc?skip=0&limit=30'
-            );
-            setPages(res.data.data);
-        }
-
-        getDanhSachDanhMucTinTuc();
-    }, []);
+    const { data, error } = useSWR('DanhMucTinTuc/GetDanhSachDanhMucTinTuc?skip=0&limit=30');
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
     };
 
-    const handleCloseNavMenu = (event: any) => {
-        console.log(event.target.innerText);
-
+    const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
-
+    if (error) return <div>Đã xảy ra lỗi</div>;
     return (
         <header className="fixed top-0 w-full h-20 z-50">
             <AppBar className="pl-4">
@@ -81,7 +67,7 @@ function Header() {
                                 display: { xs: 'block', md: 'none' },
                             }}
                         >
-                            {pages.map((page) => (
+                            {data?.data.data.map((page: any) => (
                                 <MenuItem key={page.id} onClick={handleCloseNavMenu}>
                                     <Typography textAlign="center">{page.tenDanhMuc}</Typography>
                                 </MenuItem>
@@ -96,7 +82,7 @@ function Header() {
                     </Box>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {pages.map((page) => (
+                        {data?.data.data.map((page: any) => (
                             <Button
                                 key={page.id}
                                 onClick={handleCloseNavMenu}
