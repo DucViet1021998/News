@@ -29,19 +29,24 @@ export default function Home() {
 
     useEffect(() => {
         setTimeout(async () => {
+            if (data.length > 36) {
+                setLoading(false);
+                return;
+            }
             const res = await axiosClient.get(
                 `TinTucHeThong/GetDanhSachTinTuc?cap_don_vi=4&loai_nguoi_dung=4&ma_so=shn&skip=${skip}&limit=30`
             );
             setData((prev) => [...prev, ...res.data.data]);
             setLoading(false);
         }, 1500);
-    }, [skip]);
+    }, [skip, data]);
 
     useEffect(() => {
         const handleScroll = () => {
             if (
                 window.innerHeight + document.documentElement.scrollTop + 1 >=
-                document.documentElement.scrollHeight
+                    document.documentElement.scrollHeight &&
+                data.length < 36
             ) {
                 setLoading(true);
                 setSkip((prev) => prev + 30);

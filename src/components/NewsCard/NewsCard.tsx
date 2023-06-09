@@ -26,7 +26,7 @@ export default function NewsCard({
                 src={anhDaiDien}
                 alt={tomTat}
             />
-            <span className="absolute top-3/4 left-5 text-transparent text-white text-lg z-40">
+            <span className="absolute top-3/4 left-5 text-transparent leading-5 text-white text-base  h-12 z-40">
                 {tieuDe}
             </span>
             <span className="absolute bottom-0 right-2 text-white z-40">
