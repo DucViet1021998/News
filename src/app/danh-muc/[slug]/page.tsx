@@ -23,7 +23,7 @@ function DanhMucTinTuc() {
                 setTimeout(async () => {
                     setIsLoading(true);
                     const res = await axiosClient.get(
-                        `http://api-tintuc-dev.enetviet.com/TinTucHeThong/GetDanhSachTinTuc?skip=${skip}&limit=9&danh_muc_tin_tuc_id=${params.slug}`
+                        `https://api-tintuc-dev.enetviet.com/TinTucHeThong/GetDanhSachTinTuc?skip=${skip}&limit=9&danh_muc_tin_tuc_id=${params.slug}`
                     );
                     if (res.data.total === 2 || res.data.total === 4) {
                         setData(res.data.data);
@@ -60,7 +60,6 @@ function DanhMucTinTuc() {
             <CardList data={data} />
             {isLoading && (
                 <div className="flex justify-center">
-                    {' '}
                     <CircularProgress />
                 </div>
             )}
