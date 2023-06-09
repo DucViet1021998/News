@@ -1,7 +1,7 @@
 'use client';
 
 import { SWRConfig } from 'swr';
-import axiosClient from '~/api-client/axios-client';
+import axiosClient from '~/utils/axios-client.utils';
 import Header from '../Header/Header';
 
 export function Providers({ children }: { children: React.ReactNode }) {

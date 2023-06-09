@@ -1,12 +1,11 @@
 'use client';
 
-import axiosClient from '~/api-client/axios-client';
+import axiosClient from '~/utils/axios-client.utils';
 import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import CardList from '../components/CardList/CardList';
 import { useRouter } from 'next/navigation';
 import { CircularProgress } from '@mui/material';
-import Image from 'next/image';
 
 export interface DanhSachTinTuc {
     id: string;
@@ -29,24 +28,19 @@ export default function Home() {
 
     useEffect(() => {
         setTimeout(async () => {
-            if (data.length > 36) {
-                setLoading(false);
-                return;
-            }
             const res = await axiosClient.get(
                 `TinTucHeThong/GetDanhSachTinTuc?cap_don_vi=4&loai_nguoi_dung=4&ma_so=shn&skip=${skip}&limit=30`
             );
             setData((prev) => [...prev, ...res.data.data]);
             setLoading(false);
         }, 1500);
-    }, [skip, data]);
+    }, [skip]);
 
     useEffect(() => {
         const handleScroll = () => {
             if (
                 window.innerHeight + document.documentElement.scrollTop + 1 >=
-                    document.documentElement.scrollHeight &&
-                data.length < 36
+                document.documentElement.scrollHeight
             ) {
                 setLoading(true);
                 setSkip((prev) => prev + 30);
