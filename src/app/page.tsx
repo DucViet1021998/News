@@ -24,25 +24,36 @@ export default function Home() {
     const router = useRouter();
     const [data, setData] = useState<DanhSachTinTuc[]>([]);
     const [skip, setSkip] = useState(0);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        setTimeout(async () => {
-            const res = await axiosClient.get(
-                `TinTucHeThong/GetDanhSachTinTuc?cap_don_vi=4&loai_nguoi_dung=4&ma_so=shn&skip=${skip}&limit=30`
-            );
-            setData((prev) => [...prev, ...res.data.data]);
-            setLoading(false);
-        }, 1500);
+        const GetDanhSachTinTuc = () => {
+            try {
+                if (skip >= 36) {
+                    setIsLoading(false);
+                    return;
+                }
+                setTimeout(async () => {
+                    setIsLoading(true);
+                    const res = await axiosClient.get(
+                        `TinTucHeThong/GetDanhSachTinTuc?cap_don_vi=4&loai_nguoi_dung=4&ma_so=shn&skip=${skip}&limit=30`
+                    );
+                    setData((prev) => [...prev, ...res.data.data]);
+                    setIsLoading(false);
+                }, 1500);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        GetDanhSachTinTuc();
     }, [skip]);
 
     useEffect(() => {
         const handleScroll = () => {
-            if (
-                window.innerHeight + document.documentElement.scrollTop + 1 >=
-                document.documentElement.scrollHeight
-            ) {
-                setLoading(true);
+            const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+            if (scrollTop + clientHeight >= scrollHeight) {
+                setIsLoading(true);
                 setSkip((prev) => prev + 30);
             }
         };
@@ -62,7 +73,9 @@ export default function Home() {
                 {breakingNews.map((news) => (
                     <div
                         key={news.id}
-                        onClick={() => router.push(`/chi-tiet-tin-tuc/${news.id}`)}
+                        onClick={() => {
+                            router.push(`/chi-tiet-tin-tuc/${news.id}`);
+                        }}
                         className="relative w-8/12 bg-gradient cursor-pointer"
                     >
                         <img
@@ -88,7 +101,10 @@ export default function Home() {
                 <div className="w-3/12 flex gap-2 flex-col">
                     {breakingNewsMini.map((news) => (
                         <div
-                            onClick={() => router.push(`/chi-tiet-tin-tuc/${news.id}`)}
+                            onClick={() => {
+                                setIsLoading(true);
+                                router.push(`/chi-tiet-tin-tuc/${news.id}`);
+                            }}
                             key={news.id}
                             className="relative w-full h-1/3 bg-gradient overflow-hidden cursor-pointer "
                         >
@@ -115,7 +131,7 @@ export default function Home() {
             </section>
 
             <CardList data={newsByDate} />
-            {loading && (
+            {isLoading && (
                 <div className="flex justify-center">
                     {' '}
                     <CircularProgress />

@@ -7,6 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import useSWR from 'swr';
 import { LogoIcon } from '../../../public/icons/Icons';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface Pages {
     id: string;
@@ -17,6 +18,7 @@ interface Pages {
 }
 
 function Header() {
+    const router = useRouter();
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const { data, error } = useSWR('DanhMucTinTuc/GetDanhSachDanhMucTinTuc?skip=0&limit=30');
 
@@ -67,9 +69,18 @@ function Header() {
                                 display: { xs: 'block', md: 'none' },
                             }}
                         >
-                            {data?.data.data.map((page: any) => (
+                            {data?.data.data.map((page: Pages) => (
                                 <MenuItem key={page.id} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center">{page.tenDanhMuc}</Typography>
+                                    <Typography textAlign="center">
+                                        <span
+                                            onClick={() => {
+                                                router.push(`/danh-muc/${page.id}`);
+                                                console.log(page.id);
+                                            }}
+                                        >
+                                            {page.tenDanhMuc}
+                                        </span>
+                                    </Typography>
                                 </MenuItem>
                             ))}
                         </Menu>
@@ -82,13 +93,16 @@ function Header() {
                     </Box>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {data?.data.data.map((page: any) => (
+                        {data?.data.data.map((page: Pages) => (
                             <Button
                                 key={page.id}
                                 onClick={handleCloseNavMenu}
                                 sx={{ my: 2, color: 'white', display: 'block' }}
                             >
-                                {page.tenDanhMuc}
+                                <span onClick={() => router.push(`/danh-muc/${page.id}`)}>
+                                    {' '}
+                                    {page.tenDanhMuc}
+                                </span>
                             </Button>
                         ))}
                     </Box>
